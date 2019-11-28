@@ -38,7 +38,7 @@ module Main where
       putStrLn "File counter:"
       printLog xs'
       
-      
+    main :: IO ()  
     main = execParser opts >>= work
       where
         opts = info (mkConfig <**> helper)
