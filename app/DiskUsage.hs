@@ -29,7 +29,7 @@ recordEntry fp fs = do
     ext <- asks ext
     when (needRec fp ext $ isRegularFile fs) (addToTS $ fileSize fs)
   where
---    addToTS :: FileOffset -> DUApp ()
+    addToTS :: FileOffset -> DUApp ()
     addToTS ofs = modify (\st -> st {st_field = st_field st + ofs})
     needRec _ Nothing _ = True
     needRec fp (Just ext) isFile = isFile && (ext == takeExtension fp)
