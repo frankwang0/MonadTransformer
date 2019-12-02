@@ -9,9 +9,9 @@ import System.FilePath ((</>))
 
 import AppRWS
 
-traverseDirectory :: MyApp s () -> MyApp s ()
+traverseDirectory :: BillingApp s () -> BillingApp s ()
 traverseDirectory app = do
-    path <- gets curPath
+    path <- gets currentPath
     content <- liftIO $ listDirectory path
     traverse_ (go path) content
   where
@@ -20,8 +20,7 @@ traverseDirectory app = do
       app
       modify (restorePath $ path)
       
-    newPath path st @ AppState {..} = st {curDepth = curDepth + 1,
-                                          curPath = path}
-    restorePath path st @ AppState {..} = st {curDepth = curDepth - 1,
-                                              curPath = path}
-
+    newPath path st @ AppState {..} = st {currentDepth = currentDepth + 1,
+                                          currentPath = path}
+    restorePath path st @ AppState {..} = st {currentDepth = currentDepth - 1,
+                                              currentPath = path}

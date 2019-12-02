@@ -9,15 +9,15 @@ data AppConfig = AppConfig {
     }
 
 data AppState s = AppState {
-      curDepth :: Int,
-      curPath :: FilePath,
+      currentDepth :: Int,
+      currentPath :: FilePath,
       st_field :: s
     }
 
 type AppLog s = [(FilePath, s)]
 
-type MyApp s = RWST AppConfig (AppLog s) (AppState s) IO
+type BillingApp s = RWST AppConfig (AppLog s) (AppState s) IO
 
-runMyApp :: MyApp s a -> AppConfig -> s -> IO (a, AppLog s)
-runMyApp app config init =
+runBillingApp :: BillingApp s a -> AppConfig -> s -> IO (a, AppLog s)
+runBillingApp app config init =
   evalRWST app config (AppState 0 (basePath config) init)

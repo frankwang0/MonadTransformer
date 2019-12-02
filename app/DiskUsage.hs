@@ -11,30 +11,28 @@ import System.PosixCompat.Files (FileStatus, getFileStatus,
 import TraverseDir
 import AppRWS
 
-type DiskUsageApp = MyApp FileOffset
-
-diskUsage :: DiskUsageApp ()
+diskUsage :: BillingApp FileOffset ()
 diskUsage = do
     maxDepth <- asks maxDepth
     AppState {..} <- get
-    fs <- liftIO $ getFileStatus curPath
-    let isDir = isDirectory fs
-        shouldLog = isDir && curDepth <= maxDepth
+    fileStatus <- liftIO $ getFileStatus currentPath
+    let isDir = isDirectory fileStatus
+        shouldLog = isDir && currentDepth <= maxDepth
     when isDir $ traverseDirectory diskUsage
-    recordEntry curPath fs 
+    recordEntry currentPath fileStatus 
     when shouldLog $ logDiffTS st_field
 
-recordEntry :: FilePath -> FileStatus -> DiskUsageApp ()
-recordEntry fp fs = do
+recordEntry :: FilePath -> FileStatus -> BillingApp FileOffset ()
+recordEntry filePath fileStatus = do
     ext <- asks ext
-    when (needRec fp ext $ isRegularFile fs) (addToTS $ fileSize fs)
+    when (needRecord filePath ext $ isRegularFile fileStatus) (addToTS $ fileSize fileStatus)
   where
-    addToTS :: FileOffset -> DiskUsageApp ()
+    addToTS :: FileOffset -> BillingApp FileOffset ()
     addToTS ofs = modify (\st -> st {st_field = st_field st + ofs})
-    needRec _ Nothing _ = True
-    needRec fp (Just ext) isFile = isFile && (ext == takeExtension fp)
+    needRecord _ Nothing _ = True
+    needRecord fp (Just ext) isFile = isFile && (ext == takeExtension fp)
 
-logDiffTS :: FileOffset -> DiskUsageApp ()
+logDiffTS :: FileOffset -> BillingApp FileOffset ()
 logDiffTS ts = do
     AppState {..} <- get
-    tell [(curPath, st_field - ts)]
+    tell [(currentPath, st_field - ts)]

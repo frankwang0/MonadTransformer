@@ -39,7 +39,6 @@ library
 executable chargepanda-exe
   main-is: Main.hs
   other-modules:
-      App
       AppRWS
       DiskUsage
       FileCounter

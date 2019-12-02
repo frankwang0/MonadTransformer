@@ -1,6 +1,6 @@
 {-# LANGUAGE RecordWildCards #-}
 
-module FileCounter (fileCount) where
+module FileCounter (countFile) where
 
 import Control.Monad.RWS
 import System.FilePath
@@ -10,15 +10,15 @@ import System.PosixCompat.Files
 import TraverseDir
 import AppRWS
 
-fileCount :: MyApp Int ()
-fileCount = do
+countFile :: BillingApp Int ()
+countFile = do
     AppState {..} <- get
-    fs <- liftIO $ getFileStatus curPath
+    fs <- liftIO $ getFileStatus currentPath
     when (isDirectory fs) $ do
       AppConfig {..} <- ask
-      when (curDepth <= maxDepth) $ traverseDirectory fileCount
-      files <- liftIO $ listDirectory curPath
-      tell [(curPath, length $ filterFiles ext files)]
+      when (currentDepth <= maxDepth) $ traverseDirectory countFile
+      files <- liftIO $ listDirectory currentPath
+      tell [(currentPath, length $ filterFiles ext files)]
   where
     filterFiles Nothing = id
     filterFiles (Just ext) = filter ((ext==).takeExtension)

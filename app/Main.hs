@@ -28,11 +28,11 @@ module Main where
     
     work :: AppConfig -> IO ()
     work config = do
-      (_, xs) <- runMyApp diskUsage config 0
+      (_, xs) <- runBillingApp diskUsage config 0
       putStrLn "File space usage:"
       printLog xs
     
-      (_, xs') <- runMyApp fileCount config 0
+      (_, xs') <- runBillingApp countFile config 0
       putStrLn "File counter:"
       printLog xs'
       
