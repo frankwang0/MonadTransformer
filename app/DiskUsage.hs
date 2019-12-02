@@ -11,30 +11,30 @@ import System.PosixCompat.Files (FileStatus, getFileStatus,
 import TraverseDir
 import App
 
-type DUApp = MyApp FileOffset
+type DiskUsageApp = MyApp FileOffset
 
-diskUsage :: DUApp ()
+diskUsage :: DiskUsageApp ()
 diskUsage = do
     maxDepth <- asks maxDepth
     AppState {..} <- get
     fs <- liftIO $ getFileStatus curPath
     let isDir = isDirectory fs
         shouldLog = isDir && curDepth <= maxDepth
-    when isDir $ traverseDirectoryWith diskUsage
+    when isDir $ traverseDirectory diskUsage
     recordEntry curPath fs 
     when shouldLog $ logDiffTS st_field
 
-recordEntry :: FilePath -> FileStatus -> DUApp ()
+recordEntry :: FilePath -> FileStatus -> DiskUsageApp ()
 recordEntry fp fs = do
     ext <- asks ext
     when (needRec fp ext $ isRegularFile fs) (addToTS $ fileSize fs)
   where
-    addToTS :: FileOffset -> DUApp ()
+    addToTS :: FileOffset -> DiskUsageApp ()
     addToTS ofs = modify (\st -> st {st_field = st_field st + ofs})
     needRec _ Nothing _ = True
     needRec fp (Just ext) isFile = isFile && (ext == takeExtension fp)
 
-logDiffTS :: FileOffset -> DUApp ()
+logDiffTS :: FileOffset -> DiskUsageApp ()
 logDiffTS ts = do
     AppState {..} <- get
     tell [(curPath, st_field - ts)]

@@ -1,6 +1,6 @@
 {-# LANGUAGE RecordWildCards #-}
 
-module TraverseDir (traverseDirectoryWith) where
+module TraverseDir (traverseDirectory) where
 
 import Data.Foldable (traverse_)
 import Control.Monad.RWS
@@ -9,8 +9,8 @@ import System.FilePath ((</>))
 
 import App
 
-traverseDirectoryWith :: MyApp s () -> MyApp s ()
-traverseDirectoryWith app = do
+traverseDirectory :: MyApp s () -> MyApp s ()
+traverseDirectory app = do
     path <- gets curPath
     content <- liftIO $ listDirectory path
     traverse_ (go path) content

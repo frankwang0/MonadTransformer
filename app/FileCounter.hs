@@ -16,7 +16,7 @@ fileCount = do
     fs <- liftIO $ getFileStatus curPath
     when (isDirectory fs) $ do
       AppConfig {..} <- ask
-      when (curDepth <= maxDepth) $ traverseDirectoryWith fileCount
+      when (curDepth <= maxDepth) $ traverseDirectory fileCount
       files <- liftIO $ listDirectory curPath
       tell [(curPath, length $ filterFiles ext files)]
   where

@@ -26,8 +26,6 @@ module Main where
           putStr $ show s ++ "\t"
           putStrLn fp
     
-    
-    
     work :: AppConfig -> IO ()
     work config = do
       (_, xs) <- runMyApp diskUsage config 0
