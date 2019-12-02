@@ -10,7 +10,7 @@
             "name": "haskell-debug-adapter",
             "internalConsoleOptions": "openOnSessionStart",
             "workspace": "${workspaceRoot}",
-            "startup": "/Users/Frank/HaskellStudy/chargepanda/app/Main.hs",
+            "startup": "/Users/Frank/Haskell/Study/chargepanda/app/Main.hs",
             "startupFunc": "main",
             "startupArgs": "",
             "stopOnEntry": false,

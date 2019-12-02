@@ -25,12 +25,12 @@ diskUsage = do
 recordEntry :: FilePath -> FileStatus -> BillingApp FileOffset ()
 recordEntry filePath fileStatus = do
     ext <- asks ext
-    when (needRecord filePath ext $ isRegularFile fileStatus) (addToTS $ fileSize fileStatus)
+    when (shouldRecord filePath ext $ isRegularFile fileStatus) (addToTS $ fileSize fileStatus)
   where
     addToTS :: FileOffset -> BillingApp FileOffset ()
-    addToTS ofs = modify (\st -> st {st_field = st_field st + ofs})
-    needRecord _ Nothing _ = True
-    needRecord fp (Just ext) isFile = isFile && (ext == takeExtension fp)
+    addToTS fileOffset = modify (\st -> st {st_field = st_field st + fileOffset})
+    shouldRecord _ Nothing _ = True
+    shouldRecord fp (Just ext) isFile = isFile && (ext == takeExtension fp)
 
 logDiffTS :: FileOffset -> BillingApp FileOffset ()
 logDiffTS ts = do
