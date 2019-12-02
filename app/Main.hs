@@ -6,7 +6,7 @@ module Main where
     
     import Options.Applicative as Opt
     
-    import App
+    import AppRWS
     import DiskUsage
     import FileCounter
     

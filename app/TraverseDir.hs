@@ -7,7 +7,7 @@ import Control.Monad.RWS
 import System.Directory (listDirectory)
 import System.FilePath ((</>))
 
-import App
+import AppRWS
 
 traverseDirectory :: MyApp s () -> MyApp s ()
 traverseDirectory app = do

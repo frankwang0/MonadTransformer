@@ -9,7 +9,7 @@ import System.PosixCompat.Files (FileStatus, getFileStatus,
                                  isDirectory, isRegularFile, fileSize)
 
 import TraverseDir
-import App
+import AppRWS
 
 type DiskUsageApp = MyApp FileOffset
 

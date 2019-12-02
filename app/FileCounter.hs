@@ -8,7 +8,7 @@ import System.Directory
 import System.PosixCompat.Files
 
 import TraverseDir
-import App
+import AppRWS
 
 fileCount :: MyApp Int ()
 fileCount = do
