@@ -11,7 +11,7 @@ data AppConfig = AppConfig {
 data AppState s = AppState {
       currentDepth :: Int,
       currentPath :: FilePath,
-      st_field :: s
+      size :: s
     }
 
 type AppLog s = [(FilePath, s)]

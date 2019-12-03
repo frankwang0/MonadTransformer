@@ -13,9 +13,9 @@ traverseDirectory :: BillingApp s () -> BillingApp s ()
 traverseDirectory app = do
     path <- gets currentPath
     content <- liftIO $ listDirectory path
-    traverse_ (go path) content
+    traverse_ (readPath path) content
   where
-    go path name = do
+    readPath path name = do
       modify (newPath $ path </> name)
       app
       modify (restorePath $ path)

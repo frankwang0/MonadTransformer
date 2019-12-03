@@ -20,7 +20,7 @@ diskUsage = do
         shouldLog = isDir && currentDepth <= maxDepth
     when isDir $ traverseDirectory diskUsage
     recordEntry currentPath fileStatus 
-    when shouldLog $ logDiffTS st_field
+    when shouldLog $ logDiffTS size
 
 recordEntry :: FilePath -> FileStatus -> BillingApp FileOffset ()
 recordEntry filePath fileStatus = do
@@ -28,11 +28,11 @@ recordEntry filePath fileStatus = do
     when (shouldRecord filePath ext $ isRegularFile fileStatus) (addToTS $ fileSize fileStatus)
   where
     addToTS :: FileOffset -> BillingApp FileOffset ()
-    addToTS fileOffset = modify (\st -> st {st_field = st_field st + fileOffset})
+    addToTS offset = modify (\st -> st {size = size st + offset})
     shouldRecord _ Nothing _ = True
     shouldRecord fp (Just ext) isFile = isFile && (ext == takeExtension fp)
 
 logDiffTS :: FileOffset -> BillingApp FileOffset ()
 logDiffTS ts = do
     AppState {..} <- get
-    tell [(currentPath, st_field - ts)]
+    tell [(currentPath, size - ts)]

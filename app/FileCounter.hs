@@ -13,8 +13,8 @@ import AppRWS
 countFile :: BillingApp Int ()
 countFile = do
     AppState {..} <- get
-    fs <- liftIO $ getFileStatus currentPath
-    when (isDirectory fs) $ do
+    fileStatus <- liftIO $ getFileStatus currentPath
+    when (isDirectory fileStatus) $ do
       AppConfig {..} <- ask
       when (currentDepth <= maxDepth) $ traverseDirectory countFile
       files <- liftIO $ listDirectory currentPath
