@@ -21,4 +21,4 @@ countFile = do
       tell [(currentPath, length $ filterFiles ext files)]
   where
     filterFiles Nothing = id
-    filterFiles (Just ext) = filter ((ext==).takeExtension)
+    filterFiles (Just ext) = filter $ (ext==).takeExtension

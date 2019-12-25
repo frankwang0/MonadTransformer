@@ -12,14 +12,14 @@ import AppRWS
 traverseDirectory :: BillingApp s () -> BillingApp s ()
 traverseDirectory app = do
     path <- gets currentPath
-    content <- liftIO $ listDirectory path
-    traverse_ (readPath path) content
+    files <- liftIO $ listDirectory path
+    traverse_ (readPath path) files
   where
     readPath path name = do
       modify (newPath $ path </> name)
       app
       modify (restorePath $ path)
-      
+
     newPath path st @ AppState {..} = st {currentDepth = currentDepth + 1,
                                           currentPath = path}
     restorePath path st @ AppState {..} = st {currentDepth = currentDepth - 1,
